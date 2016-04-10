@@ -1,0 +1,16 @@
+data <- read.csv("Individual household electric power consumption Data Set.txt", sep = ";")
+
+library(dplyr)
+data2 <- filter(data, Date == "1/2/2007" | Date == "2/2/2007")
+head(data2)
+data2$Sub_metering_1 <- as.numeric(as.character(data2$Sub_metering_1))
+data2$Sub_metering_2 <- as.numeric(as.character(data2$Sub_metering_2))
+data2$Sub_metering_3 <- as.numeric(as.character(data2$Sub_metering_3))
+data2$DateTime <- as.POSIXlt(strptime(paste(data2$Date, data2$Time), "%d/%m/%Y %H:%M:%S"))
+
+png("plot3.png", 480, 480)
+with(data2, plot(DateTime, Sub_metering_1, type="l", ylab = "Energy sub metering", xlab = ""))
+with(data2, points(DateTime, Sub_metering_2, col = "Red", type = "l"))
+with(data2, points(DateTime, Sub_metering_3, col = "Blue", type = "l"))
+legend("topright", pch = "_", col = c("Black", "Red", "Blue"), legend = c("Sub_metering_1", "Sub_metering_1", "Sub_metering_3"))
+dev.off()
